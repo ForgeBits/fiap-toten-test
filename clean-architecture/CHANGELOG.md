@@ -1,3 +1,12 @@
+# 1.0.0 (2025-07-20)
+
+
+### Features
+
+* add initial project setup with configuration files, database migrations, and basic entities ([419e89b](https://github.com/ForgeBits/fiap-toten-test/commit/419e89ba491bd6f3a20c9f0a0db2de17af3a60de))
+* add permissions for contents and issues in CI configuration ([83ee8b6](https://github.com/ForgeBits/fiap-toten-test/commit/83ee8b6a30684156be91d6903036fd838bb8a5a0))
+* update README with new test entry modification ([5583617](https://github.com/ForgeBits/fiap-toten-test/commit/5583617caed15bedb74ee1d1acf52a516a4c901b))
+
 # [2.1.0](https://github.com/vinicius0012/11soat-fast-food-clean-architecture/compare/v2.0.1...v2.1.0) (2025-07-20)
 
 
