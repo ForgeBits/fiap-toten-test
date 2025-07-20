@@ -1,1 +1,1 @@
-new test 2 2 3
+testando no novo registry
