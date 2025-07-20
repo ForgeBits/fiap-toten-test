@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/ForgeBits/fiap-toten-test/compare/v1.1.0...v1.2.0) (2025-07-20)
+
+
+### Features
+
+* add permissions for contents and issues in CI configuration ([d3231ff](https://github.com/ForgeBits/fiap-toten-test/commit/d3231ff2b622cb369caba1e0f8c4093dff90f904))
+
 # [1.1.0](https://github.com/ForgeBits/fiap-toten-test/compare/v1.0.0...v1.1.0) (2025-07-20)
 
 
