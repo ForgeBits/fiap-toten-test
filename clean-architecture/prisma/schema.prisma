@@ -1,0 +1,160 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CollaboratorType {
+  Operator   @map("operator")
+  Admin      @map("admin")
+  Manager    @map("manager")
+  Supervisor @map("supervisor")
+}
+
+enum CollaboratorStatus {
+  Active   @map("active")
+  Inactive @map("inactive")
+}
+
+model Client {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  name       String
+  document   String   @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  Order      Order[]
+}
+
+enum OrderStatus {
+  PENDING          @map("PENDING")
+  PAID             @map("PAID")
+  CANCELED         @map("CANCELED")
+  FAILED           @map("FAILED")
+  IN_PREPARATION   @map("IN_PREPARATION")
+  READY_TO_DELIVER @map("READY_TO_DELIVER")
+  DONE             @map("DONE")
+}
+
+model OrderCustomerItem {
+  id          Int        @id @default(autoincrement())
+  productId   Int
+  quantity    Int
+  price       Decimal
+  unitPrice   Decimal?
+  title       String?
+  description String?
+  photo       String?
+  observation String?
+  orderItem   OrderItem? @relation("OrderCustomerItem", fields: [orderItemId], references: [id])
+  orderItemId Int?
+}
+
+model OrderItem {
+  id            Int                 @id @default(autoincrement())
+  productId     Int
+  price         Decimal
+  unitPrice     Decimal?
+  title         String?
+  description   String?
+  photo         String?
+  quantity      Int
+  order_id      Int
+  observation   String?
+  Order         Order               @relation(fields: [order_id], references: [id])
+  customerItems OrderCustomerItem[] @relation("OrderCustomerItem")
+}
+
+model Order {
+  id               Int         @id @default(autoincrement())
+  // client
+  clientId         Int?
+  client           Client?     @relation(fields: [clientId], references: [id])
+  status           OrderStatus
+  amount           Decimal
+  transactionId    String?     @unique
+  isRandomClient   Boolean     @default(false)
+  codeClientRandom Int?
+  items            OrderItem[] @relation
+  observation      String?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+}
+
+model Collaborators {
+  id         Int                @id @default(autoincrement())
+  email      String             @unique
+  name       String
+  document   String             @unique
+  password   String
+  phone      String?
+  photo      String?
+  status     CollaboratorStatus @map("status")
+  type       CollaboratorType   @map("type")
+  created_at DateTime           @default(now())
+  updated_at DateTime           @updatedAt
+}
+
+model Item {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  amount      Decimal
+  quantity    Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  isActive      Boolean       @default(true)
+  // product_items
+  product_items ProductItem[] @relation
+}
+
+model ProductItem {
+  id           Int      @id @default(autoincrement())
+  essential    Boolean
+  quantity     Int
+  customizable Boolean
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  // relation product
+  product_id   Int
+  product      Product  @relation(fields: [product_id], references: [id])
+  // relation item
+  item_id      Int
+  items        Item     @relation(fields: [item_id], references: [id])
+}
+
+model Product {
+  id            Int           @id @default(autoincrement())
+  name          String
+  description   String?
+  amount        Int
+  url_img       String
+  customizable  Boolean
+  available     Boolean
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+  // categories
+  category_id   Int
+  category      Categories    @relation(fields: [category_id], references: [id])
+  // product_items
+  product_items ProductItem[] @relation
+}
+
+model Categories {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  description String?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  products    Product[]
+}
